@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
-
+import { Context } from './context';
 const List = styled.ul`
     display:flex;
-    jystify-content:space-around;
+    justify-content:space-around;
     flex-wrap:wrap;
 `;
 
@@ -42,13 +42,17 @@ const Item = styled.li`
     }
 `;
 
-export const ListItem = (props) =>(
-    <List>
-        { props.ItemList.map( item =>(
-            <Item key={item.id} img={item.img}>
-                <p>{item.name}</p>
-        <p>{item.price.toLocaleString('ru-RU',{style: 'currency', currency: 'RUB'})}</p>
-            </Item>
-        )) }
-    </List>
-)
+export const ListItem = ({ItemList}) =>{
+
+    const { openItem : {setOpenItem}} = useContext(Context);
+    return (
+        <List>
+            { ItemList.map( item =>(
+                <Item key={item.id} img={item.img} onClick={()=> setOpenItem(item)}>
+                    <p>{item.name}</p>
+            <p>{item.price.toLocaleString('ru-RU',{style: 'currency', currency: 'RUB'})}</p>
+                </Item>
+            )) }
+        </List>
+    );
+}

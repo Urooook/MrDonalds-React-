@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import styled from 'styled-components';
 import logoImg from '../img/logo.svg';
 import sign from '../img/sign.svg';
+import { Context } from './context';
 
 const NavbarStyled = styled.header`
     position:fixed;
@@ -49,15 +50,49 @@ const Btn = styled.button`
     
     
 `;
+const User = styled.div`
+    display:flex;
+    align-items:center;
+    text-align:center;
+    
+    
+`;
+const LogOut = styled.span`
+    font-size:20px;
+    font-weight:700px;
+    cursor:pointer;
+    margin-right:40px;
+`;
+const Figure = styled.figure`
+    margin:0px 15px;
+    border-right:1px solid #fff;
+    padding-right: 20px;
+`;
 
-export const Navbar = () =>(
-    <NavbarStyled>
-        <Logo>
-        <ImgLogo src={logoImg} alt="Logo" />
-        <H1>MrDonald's</H1>
-        </Logo>
-        <Btn>
-            <img src={sign} alt="Войти"/>
-            <p>Войти</p></Btn>
-    </NavbarStyled>
-);
+export const Navbar = () =>{
+    const { auth: { authentication,login,logOut } } = useContext(Context);
+   
+
+    return (
+        <NavbarStyled>
+            <Logo>
+            <ImgLogo src={logoImg} alt="Logo" />
+            <H1>MrDonald's</H1>
+            </Logo>
+    
+            {authentication ?
+            <User>
+                <Figure>
+                <img src={sign} alt= {authentication.displayName}/>
+                <figcaption>
+                    {authentication.displayName}
+                </figcaption>
+                </Figure>
+                <LogOut title='Выйти' onClick={logOut}>Х</LogOut>
+            </User>
+             :<Btn onClick={login}>
+                <img src={sign} alt="Войти"/>
+                <p>Войти</p></Btn>}
+        </NavbarStyled>
+    );
+}
